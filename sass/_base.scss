@@ -1,9 +1,18 @@
+// colors
+$text_primary: #00ff00;
+$text_secondary: #008000;
+
+$color_white: #fff;
+$color_black: #000;
+
 * {
   margin: 0;
   padding: 0;
 }
 
-*, :before, :after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -17,4 +26,3 @@ body {
   font-weight: 400;
   line-height: 1.6;
 }
-/*# sourceMappingURL=todo_list.8d8029cf.css.map */
