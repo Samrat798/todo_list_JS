@@ -1,0 +1,53 @@
+.todo__input {
+  width: 70%;
+  padding: 0.8rem 1rem;
+  font-size: 1.6rem;
+  border-radius: 8px;
+  border: 1px solid $color-grey-dark-2;
+  outline: none;
+  box-shadow: 0.5rem 1rem 2rem rgba($color-black, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+.todo__input:focus {
+  border: none;
+  border-bottom: 1px solid $color-grey-dark-2;
+  box-shadow: 0rem 0.5rem 1.5rem rgba($color-black, 0.3);
+}
+
+.btn {
+  cursor: pointer;
+  padding: 0.8rem 1rem;
+  margin-left: 1rem;
+  font-size: 1.6rem;
+  border-radius: 8px;
+  border: 1px solid $color-grey-dark-2;
+  outline: none;
+  box-shadow: 0.5rem 1rem 2rem rgba($color-black, 0.3);
+  transition: all 0.3s ease-in-out;
+}
+
+.btn:active {
+  transform: translateY(2px);
+  box-shadow: 0rem 0.5rem 1.5rem rgba($color-black, 0.3);
+}
+
+.todo__container {
+  margin: 1.5rem 3rem;
+}
+
+.task {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.8rem;
+}
+
+.edit__btn {
+  background-color: #ff0000;
+  color: $color-white;
+}
+
+.delete__btn {
+  background-color: #00ff00;
+  color: $color-black;
+}
