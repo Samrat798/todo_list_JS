@@ -104,4 +104,8 @@ body {
   width: 100%;
   margin: 1rem 0;
 }
+
+.hidden {
+  display: none;
+}
 /*# sourceMappingURL=todo_list_JS.8d8029cf.css.map */
