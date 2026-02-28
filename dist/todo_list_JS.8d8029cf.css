@@ -108,4 +108,8 @@ body {
 .hidden {
   display: none;
 }
+
+.mark__complete {
+  text-decoration: line-through;
+}
 /*# sourceMappingURL=todo_list_JS.8d8029cf.css.map */

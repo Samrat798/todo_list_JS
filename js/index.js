@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
       li.dataset.id = task.id;
 
       li.innerHTML = `
-            <input type='checkbox' class='mark__complete'/>
-            <span class="task__text">${task.text}</span>
+            ${task.complete ? '<input type="checkbox" checked />' : '<input type="checkbox" />'}
+            <span class="task__text ${task.complete ? 'mark__complete' : ''}">${task.text}</span>
             <div class="task-btn__container">
                 <button class="btn edit__btn">Edit</button>
                 <button class="btn delete__btn">Delete</button>
@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const addTask = function (e) {
     e.preventDefault();
     const taskText = todoInput.value;
+    if (!taskText) return alert('Please add a task...');
     const newtask = {
       id: Date.now(),
       text: taskText,
@@ -47,11 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   const handelTaskListClick = function (e) {
-    const markBtn = document.querySelector('.mark__complete');
-
+    if (e.target.type === 'checkbox') {
+      markTask(e.target.parentElement.getAttribute('data-id'));
+    }
     const target = e.target.closest('button');
-    if (!target || !markBtn) return;
-
+    if (!target) return;
     const taskId = target.closest('.task').dataset.id;
     if (target.classList.contains('delete__btn')) {
       deleteTask(taskId);
@@ -59,7 +60,12 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   const markTask = function (id) {
-    tasks = tasks.find((task) => task.id == id);
+    tasks.forEach(function (task) {
+      if (task.id == id) {
+        task.complete = !task.complete;
+      }
+    });
+    renderTask();
   };
 
   const deleteTask = function (id) {
@@ -67,12 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
     renderTask();
   };
 
-  //   const editTask = function(id) {
-  //     let task = tasks.find(task => task.id == id)
-  //     todoInput.value = task.task;
-  //     addBtn.textContent = 'Edit';
-
-  //   }
+  const editTask = function (id) {
+    let task = tasks.find((task) => task.id == id);
+    todoInput.value = task.text;
+    addBtn.textContent = 'Done';
+  };
 
   addBtn.addEventListener('click', addTask);
   todoContainer.addEventListener('click', handelTaskListClick);
