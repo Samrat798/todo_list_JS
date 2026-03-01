@@ -5,8 +5,12 @@ document.addEventListener('DOMContentLoaded', function () {
   const emptyMessage = document.querySelector('.empty__message');
 
   let tasks = [];
+  // edit option
+  let editElement;
+  let editFlag = false;
+  let editID = '';
 
-  const renderTask = function () {
+  const renderTask = function (tasks) {
     todoContainer.innerHTML = '';
 
     if (tasks.length !== 0) {
@@ -24,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ${task.complete ? '<input type="checkbox" checked />' : '<input type="checkbox" />'}
             <span class="task__text ${task.complete ? 'mark__complete' : ''}">${task.text}</span>
             <div class="task-btn__container">
-                <button class="btn edit__btn">Edit</button>
+            ${task.complete ? '<button class="btn edit__btn btn-disabled" disabled>Edit</button>' : '<button class="btn edit__btn">Edit</button>'}
                 <button class="btn delete__btn">Delete</button>
             </div>
         `;
@@ -35,16 +39,30 @@ document.addEventListener('DOMContentLoaded', function () {
   const addTask = function (e) {
     e.preventDefault();
     const taskText = todoInput.value;
-    if (!taskText) return alert('Please add a task...');
-    const newtask = {
-      id: Date.now(),
-      text: taskText,
-      complete: false,
-    };
-    tasks.push(newtask);
-    renderTask();
-    todoInput.value = '';
-    todoInput.focus();
+
+    if (taskText !== '' && !editFlag) {
+      // Add new task
+      const newtask = {
+        id: Date.now(),
+        text: taskText,
+        complete: false,
+      };
+      tasks.push(newtask);
+      renderTask(tasks);
+      todoInput.value = '';
+      todoInput.focus();
+    } else if (taskText !== '' && editFlag) {
+      // Edit existing task
+      tasks.forEach(function (task) {
+        if (task.id == editID) {
+          task.text = taskText;
+        }
+      });
+      renderTask(tasks);
+      setBackToDefault();
+    } else {
+      alert('Please add a task...');
+    }
   };
 
   const handelTaskListClick = function (e) {
@@ -56,6 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskId = target.closest('.task').dataset.id;
     if (target.classList.contains('delete__btn')) {
       deleteTask(taskId);
+    } else if (target.classList.contains('edit__btn')) {
+      editTask();
     }
   };
 
@@ -65,20 +85,19 @@ document.addEventListener('DOMContentLoaded', function () {
         task.complete = !task.complete;
       }
     });
-    renderTask();
+    renderTask(tasks);
+    // saveTask();
   };
 
   const deleteTask = function (id) {
     tasks = tasks.filter((task) => task.id != id);
-    renderTask();
+    renderTask(tasks);
+    // saveTask();
   };
 
-  const editTask = function (id) {
-    let task = tasks.find((task) => task.id == id);
-    todoInput.value = task.text;
-    addBtn.textContent = 'Done';
-  };
+  const editTask = function () {};
 
+  renderTask(tasks);
   addBtn.addEventListener('click', addTask);
   todoContainer.addEventListener('click', handelTaskListClick);
 });

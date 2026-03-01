@@ -112,4 +112,9 @@ body {
 .mark__complete {
   text-decoration: line-through;
 }
+
+.btn-disabled {
+  color: #000;
+  background-color: #fff;
+}
 /*# sourceMappingURL=todo_list_JS.8d8029cf.css.map */
