@@ -719,11 +719,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const addBtn = document.querySelector('.add__btn');
     const todoContainer = document.querySelector('.todo__container');
     const emptyMessage = document.querySelector('.empty__message');
-    let tasks = [];
-    // edit option
-    let editElement;
-    let editFlag = false;
-    let editID = '';
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const saveTask = ()=>{
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    };
     const renderTask = function(tasks) {
         todoContainer.innerHTML = '';
         if (tasks.length !== 0) emptyMessage.classList.add('hidden');
@@ -746,25 +745,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const addTask = function(e) {
         e.preventDefault();
         const taskText = todoInput.value;
-        if (taskText !== '' && !editFlag) {
-            // Add new task
-            const newtask = {
-                id: Date.now(),
-                text: taskText,
-                complete: false
-            };
-            tasks.push(newtask);
-            renderTask(tasks);
-            todoInput.value = '';
-            todoInput.focus();
-        } else if (taskText !== '' && editFlag) {
-            // Edit existing task
-            tasks.forEach(function(task) {
-                if (task.id == editID) task.text = taskText;
-            });
-            renderTask(tasks);
-            setBackToDefault();
-        } else alert('Please add a task...');
+        // Add new task
+        const newtask = {
+            id: Date.now(),
+            text: taskText,
+            complete: false
+        };
+        tasks.push(newtask);
+        renderTask(tasks);
+        todoInput.value = '';
+        todoInput.focus();
+        saveTask();
+        renderTask(tasks);
     };
     const handelTaskListClick = function(e) {
         if (e.target.type === 'checkbox') markTask(e.target.parentElement.getAttribute('data-id'));
@@ -772,21 +764,27 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!target) return;
         const taskId = target.closest('.task').dataset.id;
         if (target.classList.contains('delete__btn')) deleteTask(taskId);
-        else if (target.classList.contains('edit__btn')) editTask();
+        else if (target.classList.contains('edit__btn')) editTask(taskId);
     };
     const markTask = function(id) {
         tasks.forEach(function(task) {
             if (task.id == id) task.complete = !task.complete;
         });
         renderTask(tasks);
-    // saveTask();
+        saveTask();
     };
     const deleteTask = function(id) {
         tasks = tasks.filter((task)=>task.id != id);
         renderTask(tasks);
-    // saveTask();
+        saveTask();
     };
-    const editTask = function() {};
+    const editTask = function(id) {
+        const task = tasks.find((t)=>t.id == id);
+        const newVal = prompt('Edit your task: ', task.text);
+        if (newVal !== null && newVal.trim() !== '') task.text = newVal.trim();
+        saveTask();
+        renderTask(tasks);
+    };
     renderTask(tasks);
     addBtn.addEventListener('click', addTask);
     todoContainer.addEventListener('click', handelTaskListClick);
